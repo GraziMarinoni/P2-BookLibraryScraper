@@ -42,12 +42,12 @@ def details(url):
         writer.writerow(header_values)
     return
 
-# calling the function for the first book URL
+# Calling the function for the first book URL
 details(bookURL)
-# end of phase one
+# End of phase 1
 
-# start of phase two
-# scrapes the chosen category page
+# Start of phase 2
+# Scrapes the chosen category page
 page_category = requests.get("http://books.toscrape.com/catalogue/category/books/sequential-art_5/index.html")
 soup = BeautifulSoup(page_category.content, "html.parser")
 # print(soup.prettify())
@@ -60,3 +60,40 @@ url_list = soup.find_all("div", class_="image_container")
 for i in range(len(url_list)):
     url = url_list[i].find("a")["href"].replace("../../../","http://books.toscrape.com/catalogue/")
     details(url)
+
+# End of phase 2 (PAGINATION still to be done)
+
+# Start of phase 3
+def scan_page():
+    books_page = requests.get("http://books.toscrape.com/catalogue/category/books_1/index.html")
+    formatted_html = BeautifulSoup(books_page.content, "html.parser")
+    return formatted_html
+
+
+def find_all_categories_links(html):
+    categories = html.find("div", class_="side_categories")
+    links = categories.find_all("a")
+    del links[0]
+    return links
+
+
+def find_all_category_books(category):
+    for book in category:
+        print(book)
+
+def phase_three():
+    html = scan_page()
+    categories = find_all_categories_links(html)
+    for category in categories:
+        find_all_category_books(category)
+
+
+categories = find_all_categories_links()
+for category in categories:
+    book_address = category["href"]
+    book_url = book_address.replace("../","http://books.toscrape.com/catalogue/category/")
+    print(book_address)
+
+# for i in range(len(meta_list)):
+#     meta_url = meta_list[i].find("li").find("a")["href"].replace("../../../","http://books.toscrape.com/catalogue/")
+#     details(meta_url)
