@@ -25,5 +25,3 @@ review_rating = soup.find("p", class_="instock availability").find_next_sibling(
 product_page_url = soup.findAll(string=lambda string: isinstance(string, Comment))[9].replace('\n', '').replace(" ", "").replace('<aid="write_review"href="/', '').replace('/reviews/add/#addreview"class="btnbtn-successbtn-sm">Writeareview</a>', '').replace('catalogue/', 'https://books.toscrape.com/catalogue/')
 header_values = [product_page_url, UPC, book_title, price_incl_tax, price_excl_tax, qnt_available, product_description, category, review_rating, image_url]
 print(header_values)
-
-
