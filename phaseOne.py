@@ -2,14 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 import pathlib
+
 images_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/images')
 data_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/data')
+
 def scan_page(url):
     raw_page = requests.get(url)
     page = BeautifulSoup(raw_page.content, "html.parser")
     return page
-# print(page.prettify()) >>>> This is a command
 
+# print(page.prettify()) >>>> This is a command
+test="http://books.toscrape.com/catalogue/red-hoodarsenal-vol-1-open-for-business-red-hoodarsenal-1_729/index.html"
 
 def details(url):
     page = scan_page(url)
@@ -37,11 +40,11 @@ def details(url):
     with csv_path.open(mode='a') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(header_values)
-
+    imageName= str(book_title).replace("/"," ")
     img_data = requests.get(image_url).content
-    print(img_data)
-    img_path = (images_path/f"{book_title}").with_suffix('.jpg')
+    img_path = (images_path/f"{imageName}").with_suffix('.jpg')
     with img_path.open(mode='wb') as image:
         image.write(img_data)
     return
 
+details(test)
