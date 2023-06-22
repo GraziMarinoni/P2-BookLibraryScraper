@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from phaseOne import scan_page, details
 
+# folder path where the data and images will be stored
 data_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/data')
 
 headings = ["category",
@@ -19,27 +20,19 @@ headings = ["category",
             "image_url"]
 
 
-def phase_two(category_url):
-    cat_page = scan_page(category_url)
-    # To collect a list of the div tags that have the books URLs
-    bookURL_list = cat_page.find_all("div", class_="image_container")
-
-    # To collect a list of the div tags that have the books URLs
-    for books in bookURL_list:
-        bookURL = books.find("a")["href"].replace("../../../","http://books.toscrape.com/catalogue/")
-        details(bookURL)
-    return
-
+# finds out whether that category section has multiple pages and gets all their urls to run through phase_two
 def process_pages(url):
-    cat_page = scan_page(url)
-    category_name = cat_page.find("strong").get_text()
-    # To collect a list of the div tags that have the books URLs
+    first_page_cat = scan_page(url)
+    category_name = first_page_cat.find("strong").get_text()
+
+    # it creates the csvfile with the headings and runs the first category page through phase_two
     csv_path = (data_path / f"{category_name}").with_suffix('.csv')
     with csv_path.open(mode='w') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(headings)
     phase_two(url)
 
+    # gets the following url pages of the current category if any
     while True:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "lxml")
@@ -54,4 +47,14 @@ def process_pages(url):
             break
 
 
-# if __name__ == '__main__':
+# runs all categories urls found in process_pages and finishes by accessing each book and getting its details
+def phase_two(category_url):
+    cat_page = scan_page(category_url)
+    book_url_list = cat_page.find_all("div", class_="image_container")
+    # To collect a list of the div tags that have the books URLs
+
+    for books in book_url_list:
+        book_url = books.find("a")["href"].replace("../../../", "http://books.toscrape.com/catalogue/")
+        details(book_url)
+    return
+

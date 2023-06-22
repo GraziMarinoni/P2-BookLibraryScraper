@@ -1,19 +1,14 @@
 import requests
-from bs4 import BeautifulSoup
 import csv
 import pathlib
+from phaseThree import scan_page
 
+# folder path where the data and images will be stored
 images_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/images')
 data_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/data')
 
-def scan_page(url):
-    raw_page = requests.get(url)
-    page = BeautifulSoup(raw_page.content, "html.parser")
-    return page
 
-# print(page.prettify()) >>>> This is a command
-test="http://books.toscrape.com/catalogue/red-hoodarsenal-vol-1-open-for-business-red-hoodarsenal-1_729/index.html"
-
+# pulls book details
 def details(url):
     page = scan_page(url)
 
@@ -33,18 +28,18 @@ def details(url):
 
     header_values = [category_name, book_title, product_page_url, upc, price_incl_tax, price_excl_tax, qnt_available,
                      product_description, review_rating, image_url]
-    # print(header_values)   >>>> This is a command
 
-
-    csv_path = (data_path/ f"{category_name}").with_suffix('.csv')
+    # stores the values in the csvfile created on phaseTwo
+    csv_path = (data_path/f"{category_name}").with_suffix('.csv')
     with csv_path.open(mode='a') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(header_values)
-    imageName= str(book_title).replace("/"," ")
+
+    # stores the books images as jpg
+    image_name = str(book_title).replace("/"," ")
     img_data = requests.get(image_url).content
-    img_path = (images_path/f"{imageName}").with_suffix('.jpg')
+    img_path = (images_path/f"{image_name}").with_suffix('.jpg')
     with img_path.open(mode='wb') as image:
         image.write(img_data)
     return
 
-details(test)
