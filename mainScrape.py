@@ -1,16 +1,7 @@
-import requests
-from bs4 import BeautifulSoup
-from phaseTwo import process_pages
+from categoryScrape import process_pages
+from bookScrape import scan_page
 
 homeURL = "http://books.toscrape.com/catalogue/category/books_1/index.html"
-
-
-# scans current page and returns it
-def scan_page(url):
-    raw_page = requests.get(url)
-    page = BeautifulSoup(raw_page.content, "html.parser")
-    return page
-
 
 home_page = scan_page(homeURL)
 # scans all the source page for categories and returns the div with certain class

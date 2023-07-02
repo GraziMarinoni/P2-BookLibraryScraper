@@ -1,11 +1,26 @@
 import requests
 import csv
 import pathlib
-from phaseThree import scan_page
+import os
+from bs4 import BeautifulSoup
+
+directory_images = "images"
+
+# Check if the directory exists
+if not os.path.exists(directory_images):
+    # If it doesn't exist, create it
+    os.makedirs(directory_images)
 
 # folder path where the data and images will be stored
-images_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/images')
-data_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/data')
+images_path = pathlib.Path('./images')
+data_path = pathlib.Path('./data')
+
+
+# scans current page and returns it
+def scan_page(url):
+    raw_page = requests.get(url)
+    page = BeautifulSoup(raw_page.content, "html.parser")
+    return page
 
 
 # pulls book details

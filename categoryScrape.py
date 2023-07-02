@@ -1,12 +1,20 @@
 import requests
 import csv
 import pathlib
+import os
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from phaseOne import scan_page, details
+from bookScrape import scan_page, details
 
-# folder path where the data and images will be stored
-data_path = pathlib.Path('/Users/grazimarinoni/Desktop/OpenClassroom/Projects/Project-2/data')
+directory_data = "data"
+
+# Check if the directory exists
+if not os.path.exists(directory_data):
+    # If it doesn't exist, create it
+    os.makedirs(directory_data)
+
+# folder path where the data will be stored
+data_path = pathlib.Path('./data')
 
 headings = ["category",
             "book_title",
@@ -20,17 +28,17 @@ headings = ["category",
             "image_url"]
 
 
-# finds out whether that category section has multiple pages and gets all their urls to run through phase_two
+# finds out whether that category section has multiple pages and gets all their urls to run through categoryScrape.
 def process_pages(url):
     first_page_cat = scan_page(url)
     category_name = first_page_cat.find("strong").get_text()
 
-    # it creates the csvfile with the headings and runs the first category page through phase_two
+    # it creates the csvfile with the headings and runs the first category page through categoryScrape.
     csv_path = (data_path / f"{category_name}").with_suffix('.csv')
     with csv_path.open(mode='w') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(headings)
-    phase_two(url)
+    category_scrape(url)
 
     # gets the following url pages of the current category if any
     while True:
@@ -41,14 +49,14 @@ def process_pages(url):
         if next_page_element:
             next_page_url = next_page_element.get('href')
             url = urljoin(url, next_page_url)
-            phase_two(url)
+            category_scrape(url)
 
         else:
             break
 
 
 # runs all categories urls found in process_pages and finishes by accessing each book and getting its details
-def phase_two(category_url):
+def category_scrape(category_url):
     cat_page = scan_page(category_url)
     book_url_list = cat_page.find_all("div", class_="image_container")
     # To collect a list of the div tags that have the books URLs
