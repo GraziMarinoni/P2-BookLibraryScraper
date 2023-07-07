@@ -4,7 +4,7 @@ import pathlib
 import os
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from bookScrape import scan_page, details
+from book_scraper import scan_page, details
 
 directory_data = "data"
 
@@ -28,12 +28,12 @@ headings = ["category",
             "image_url"]
 
 
-# finds out whether that category section has multiple pages and gets all their urls to run through categoryScrape.
+# finds out whether that category section has multiple pages and gets all their urls to run through category_scraper.
 def process_pages(url):
     first_page_cat = scan_page(url)
     category_name = first_page_cat.find("strong").get_text()
 
-    # it creates the csvfile with the headings and runs the first category page through categoryScrape.
+    # it creates the csvfile with the headings and runs the first category page through category_scraper.
     csv_path = (data_path / f"{category_name}").with_suffix('.csv')
     with csv_path.open(mode='w') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
@@ -65,4 +65,3 @@ def category_scrape(category_url):
         book_url = books.find("a")["href"].replace("../../../", "http://books.toscrape.com/catalogue/")
         details(book_url)
     return
-

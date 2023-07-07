@@ -33,13 +33,13 @@ def details(url):
     upc = page.find("th", string="UPC").next_sibling.get_text()
     price_incl_tax = page.find("th", string="Price (incl. tax)").next_sibling.get_text()
     price_excl_tax = page.find("th", string="Price (excl. tax)").next_sibling.get_text()
-    qnt_available = page.find("p", class_="instock availability").get_text().replace("In stock (", "").replace("available)","")
+    qnt_available = page.find("p", class_="instock availability").get_text().replace("In stock (", "").replace("available)", "")
     if page.find("h2", string="Product Description"):
         product_description = page.find("h2", string="Product Description").find_next().get_text()
     else:
         product_description = "No Product Description"
     review_rating = page.find("p", class_="instock availability").find_next_sibling("p")["class"][1]
-    image_url = page.find("div", class_="item active").find("img")["src"].replace("../../","http://books.toscrape.com/")
+    image_url = page.find("div", class_="item active").find("img")["src"].replace("../../", "http://books.toscrape.com/")
 
     header_values = [category_name, book_title, product_page_url, upc, price_incl_tax, price_excl_tax, qnt_available,
                      product_description, review_rating, image_url]
@@ -51,10 +51,9 @@ def details(url):
         writer.writerow(header_values)
 
     # stores the books images as jpg
-    image_name = str(book_title).replace("/"," ")
+    image_name = str(book_title).replace("/", " ")
     img_data = requests.get(image_url).content
     img_path = (images_path/f"{image_name}").with_suffix('.jpg')
     with img_path.open(mode='wb') as image:
         image.write(img_data)
     return
-

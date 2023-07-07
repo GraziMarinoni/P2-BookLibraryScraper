@@ -1,5 +1,5 @@
-from categoryScrape import process_pages
-from bookScrape import scan_page
+from category_scraper import process_pages
+from book_scraper import scan_page
 
 homeURL = "http://books.toscrape.com/catalogue/category/books_1/index.html"
 
@@ -13,4 +13,3 @@ for category in range(1, len(url_list)):
     category_address = url_list[category]["href"]
     category_url = category_address.replace("../", "http://books.toscrape.com/catalogue/category/")
     process_pages(category_url)
-
