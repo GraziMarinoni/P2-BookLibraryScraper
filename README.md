@@ -3,6 +3,7 @@
 This is a learning project to scrape a book library (books.toscrape.com) through a Python script. The application is intended to collect and store the data and images of each book as ‘csv’ and ‘jpg’ files in a directory created for this purpose.
 
 The project is divided into three files:
+
 1 - main_scraper.py
 Scrapes all categories found in the library from the homepage and returns them as URLs. 
 2 - category_scraper.py
