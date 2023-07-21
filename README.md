@@ -12,25 +12,35 @@ The Python version used to write this script is Python 3.11.3
 
 # Installation
 
-1. Clone the repository:
-
+Step 1: Ensure you have Python installed on your computer. 
+Step 2: Ensure you have Git installed on your computer. 
+Step 3: Clone the repository:
 To test this application, execute the following command on your local machine:
 
-```shell
 git clone https://github.com/GraziMarinoni/P2-BookLibraryScraper.git
 
+Step 4: Create a virtual environment. Open the Terminal or Command Prompt and navigate to the directory where you want to create the new environment. 
+Then run the following command:
 
-2. Create and activate a virtual environment:
+cd P2-BookLibraryScraper
+python3 -m venv venv
 
-cd Project2-BookLibraryScraper
-python -m venv venv
+Step 5: Activate the virtual environment. Run the command according to your operational system:
+
 source venv/bin/activate      # For Linux/macOS
 venv\Scripts\activate.bat     # For Windows
 
+Step 6: Install the dependencies: (libraries are included in the requirements.txt file)
 
-3. Install the dependencies: (libraries are included in the requirements.txt file)
 pip install -r requirements.txt
 
-Open the ‘main_scraper.py’ file and run the code from there. All the following phases
-will be run automatically.
+# Running the app
+
+Navigate to the application's directory from the Terminal.  
+To open the file and run the code, type the command:
+
+python main_scraper.py
+
+All the following stages of the script will be run automatically.
+
 
